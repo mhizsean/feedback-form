@@ -1,5 +1,6 @@
 import { useField } from 'formik';
 import { Checkbox, FormControlLabel, FormGroup, FormControl, FormLabel, TextField, Box } from '@mui/material';
+import { useState } from 'react';
 
 const MultipleSelectWithOtherInput = ({ label, name, options }) => {
     const [field, meta, helpers] = useField(name);
@@ -7,11 +8,13 @@ const MultipleSelectWithOtherInput = ({ label, name, options }) => {
     const errorText = meta.touched && meta.error ? meta.error : '';
     const [otherValue, setOtherValue] = useState('');
 
+    const filteredOptions = options.filter(option => option !== 'Other');
+
     return (
         <FormControl component="fieldset" margin="normal" fullWidth>
             <FormLabel component="legend">{label}</FormLabel>
             <FormGroup>
-                {options.map((option, index) => (
+                {filteredOptions.map((option, index) => (
                     <FormControlLabel
                         key={index}
                         control={
@@ -50,7 +53,7 @@ const MultipleSelectWithOtherInput = ({ label, name, options }) => {
                         value={otherValue}
                         onChange={(e) => setOtherValue(e.target.value)}
                         placeholder="Please specify"
-                        variant="outlined"
+                        variant="standard"
                         fullWidth
                         margin="normal"
                     />

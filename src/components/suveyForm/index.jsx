@@ -1,18 +1,53 @@
-import { Box } from '@mui/material'
 import { Form, Formik } from 'formik'
 import ButtonComponent from '../button/Button'
-import TextInput from '../inputs/TextInput'
+import FormRender from './formRender';
+import { createValidationSchema } from '../../validation/survey.validation';
 
-const SurveyForm = () => {
+const SurveyForm = ({ data, onSubmit }) => {
+    const validationSchema = createValidationSchema(data);
+
+    const initialValues = data.reduce((values, question) => {
+        if (question.type === 'yes_no') {
+            values[question.name] = null;
+        } else if (question.type === 'multiple_select' || question.type === 'multiple_choice' || question.type === 'multiple_select_with_other') {
+            values[question.name] = [];
+        } else {
+            values[question.name] = '';
+        }
+        return values;
+    }, {});
+
     return (
-        <Box>
-            <Formik>
+        <Formik
+            onSubmit={(values, { resetForm }) => {
+                onSubmit(values);
+                resetForm();
+            }}
+
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+        >
+            {formik => (
                 <Form>
-                    <TextInput label="Name" name="name" />
-                    <ButtonComponent>Submit</ButtonComponent>
+                    {data.map((question, i) => (
+                        <FormRender
+                            key={i}
+                            question={question}
+                            formik={formik}
+                        />
+                    ))}
+                    <ButtonComponent
+                        type='submit'
+                        sx={{ bgColor: '#182854', color: '#fff', my: 2 }}
+                        fullWidth
+                    >
+                        Submit
+                    </ButtonComponent>
+
                 </Form>
-            </Formik>
-        </Box>
+            )}
+
+        </Formik>
     )
 }
 

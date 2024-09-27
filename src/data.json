@@ -22,7 +22,7 @@
             "options": ["Fast", "Reliable", "Helpful", "Affordable", "Other"],
             "validation": {"required": true, "minChoices": 1}
         },
-                {
+        {
             "type": "yes_no",
             "label": "Would you recommend us to a friend?",
             "name": "recommend",
@@ -36,8 +36,7 @@
             "validation": {"required": true, "minChoices": 1},
             "condition": {"name": "recommend", "value": false}
         },
-
-             {
+        {
             "type": "rating",
             "label": "Rate our service",
             "name": "rating",
